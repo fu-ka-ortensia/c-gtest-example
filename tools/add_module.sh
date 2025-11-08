@@ -90,14 +90,14 @@ success "ディレクトリを作成しました"
 info "target/jchg/$MODULE_NAME にファイルを生成しています..."
 
 # Header file
-TARGET_HEADER_TEMPLATE="$PROJECT_ROOT/target/jchg/_template/module_template.h"
+TARGET_HEADER_TEMPLATE="$SCRIPT_DIR/template/target/module_template.h"
 TARGET_HEADER="$TARGET_MODULE_DIR/${MODULE_NAME}.h"
 sed "s/template/$MODULE_NAME/g; s/TEMPLATE/$(echo $MODULE_NAME | tr '[:lower:]' '[:upper:]')/g" \
     "$TARGET_HEADER_TEMPLATE" > "$TARGET_HEADER"
 success "作成: ${MODULE_NAME}.h"
 
 # Source file
-TARGET_SOURCE_TEMPLATE="$PROJECT_ROOT/target/jchg/_template/module_template.c"
+TARGET_SOURCE_TEMPLATE="$SCRIPT_DIR/template/target/module_template.c"
 TARGET_SOURCE="$TARGET_MODULE_DIR/${MODULE_NAME}.c"
 sed -e "s/module_template\.h/${MODULE_NAME}\.h/g" \
     -e "s/template/${MODULE_NAME}/g" \
@@ -108,7 +108,7 @@ success "作成: ${MODULE_NAME}.c"
 info "tests/$MODULE_NAME にファイルを生成しています..."
 
 # Test file
-TEST_TEMPLATE="$PROJECT_ROOT/tests/_template/test_module_template.cpp"
+TEST_TEMPLATE="$SCRIPT_DIR/template/tests/test_module_template.cpp"
 TEST_FILE="$TEST_MODULE_DIR/test_${MODULE_NAME}.cpp"
 CLASS_NAME=$(echo ${MODULE_NAME^} | sed 's/_\([a-z]\)/\U\1/g')
 # First replace module_template, then template, to avoid double replacement
@@ -119,7 +119,7 @@ sed -e "s/module_template\.h/${MODULE_NAME}\.h/g" \
 success "作成: test_${MODULE_NAME}.cpp"
 
 # CMakeLists.txt
-CMAKE_TEMPLATE="$PROJECT_ROOT/tests/_template/CMakeLists.txt.template"
+CMAKE_TEMPLATE="$SCRIPT_DIR/template/tests/CMakeLists.txt.template"
 CMAKE_FILE="$TEST_MODULE_DIR/CMakeLists.txt"
 sed "s/template/$MODULE_NAME/g" \
     "$CMAKE_TEMPLATE" > "$CMAKE_FILE"
@@ -129,7 +129,7 @@ success "作成: CMakeLists.txt"
 info "double/$MODULE_NAME にファイルを生成しています..."
 
 # Stub file
-STUB_TEMPLATE="$PROJECT_ROOT/double/_template/module_stub_template.c"
+STUB_TEMPLATE="$SCRIPT_DIR/template/double/module_stub_template.c"
 STUB_FILE="$DOUBLE_MODULE_DIR/${MODULE_NAME}_stub.c"
 sed "s/template/$MODULE_NAME/g" "$STUB_TEMPLATE" > "$STUB_FILE"
 success "作成: ${MODULE_NAME}_stub.c"
