@@ -1,0 +1,45 @@
+# Build artifacts
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Generated files
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+
+# Test executables
+tests/*/test_*
+!tests/*/test_*.cpp
+
+# Coverage data (auto-generated at build time)
+*.gcda
+*.gcno
+*.gcov
+coverage.info
+coverage_filtered.info
+output/result/html/
+output/result/test-results.xml
+output/result/test-results.txt
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Python cache
+__pycache__/
+*.pyc
+
+# CMake build output
+CTestTestfile.cmake
+DartConfiguration.tcl
+Testing/
