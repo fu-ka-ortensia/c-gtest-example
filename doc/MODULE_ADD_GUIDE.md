@@ -1,0 +1,386 @@
+# モジュール追加ガイド
+
+このドキュメントでは、プロジェクトに新しいモジュール（例：moduleD）を追加する手順を説明します。
+
+## 🚀 クイックスタート（推奨）
+
+### 1. スクリプトを使用した自動追加（最も簡単）
+
+```bash
+cd /home/fu-ka/c_test_prj
+./tools/add_module.sh moduleD
+```
+
+このコマンドで、以下が自動生成されます:
+
+```
+target/jchg/moduleD/
+├── moduleD.h
+└── moduleD.c
+
+tests/moduleD/
+├── test_moduleD.cpp
+└── CMakeLists.txt
+
+double/moduleD/
+└── moduleD_stub.c
+```
+
+### 2. ファイルを編集して実装
+
+**target/jchg/moduleD/moduleD.c**:
+```c
+#include "moduleD.h"
+
+s4 moduleD_function1(s4 value) {
+    // TODO: 実装を追加
+    return value;
+}
+```
+
+**target/jchg/moduleD/moduleD.h**:
+```c
+#ifndef MODULED_H
+#define MODULED_H
+
+#include "common.h"
+
+s4 moduleD_function1(s4 value);
+
+#endif
+```
+
+**tests/moduleD/test_moduleD.cpp**:
+```cpp
+TEST_F(ModuleDTest, Function1_BasicTest) {
+    s4 result = moduleD_function1(100);
+    EXPECT_EQ(100, result);
+}
+```
+
+### 3. ビルドとテスト
+
+```bash
+cd build
+cmake ..
+make
+ctest --output-on-failure
+```
+
+---
+
+## 📋 手動追加手順（スクリプト失敗時の代替）
+
+スクリプトが使用できない場合は、以下の手順で手動追加できます。
+
+### Step 1: ディレクトリ構造の作成
+
+```bash
+mkdir -p target/jchg/moduleD
+mkdir -p tests/moduleD
+mkdir -p double/moduleD
+```
+
+### Step 2: テンプレートをコピーして名前置換
+
+#### 2-1. ターゲットファイルを作成
+
+```bash
+# ヘッダーファイルをコピーして置換
+sed 's/template/moduleD/g; s/TEMPLATE/MODULED/g' \
+    target/jchg/_template/module_template.h > target/jchg/moduleD/moduleD.h
+
+# ソースファイルをコピーして置換
+sed 's/template/moduleD/g' \
+    target/jchg/_template/module_template.c > target/jchg/moduleD/moduleD.c
+```
+
+#### 2-2. テストファイルを作成
+
+```bash
+# テストファイルをコピーして置換
+sed 's/template/moduleD/g; s/Template/ModuleD/g' \
+    tests/_template/test_module_template.cpp > tests/moduleD/test_moduleD.cpp
+
+# CMakeLists.txt をコピーして置換
+sed 's/template/moduleD/g; s/Template/ModuleD/g' \
+    tests/_template/CMakeLists.txt.template > tests/moduleD/CMakeLists.txt
+```
+
+#### 2-3. スタブファイルを作成
+
+```bash
+sed 's/template/moduleD/g' \
+    double/_template/module_stub_template.c > double/moduleD/moduleD_stub.c
+```
+
+### Step 3: tests/CMakeLists.txt に追加
+
+**tests/CMakeLists.txt**:
+
+```cmake
+add_subdirectory(moduleA)
+add_subdirectory(moduleB)
+add_subdirectory(moduleC)
+add_subdirectory(moduleD)  # ← 追加
+```
+
+### Step 4: ビルド設定を確認
+
+CMakeLists.txt (ルート) が自動的に tests フォルダ以下をビルドするか確認:
+
+```cmake
+# CMakeLists.txt（ルート）
+add_subdirectory(tests)
+```
+
+---
+
+## 📁 テンプレートの内容
+
+### target/jchg/_template/module_template.h
+
+**役割**: ターゲットモジュールのヘッダーテンプレート
+
+```c
+#ifndef MODULE_TEMPLATE_H
+#define MODULE_TEMPLATE_H
+
+#include "common.h"
+
+s4 module_template_function1(s4 value);
+u4 module_template_function2(u1* data, u4 length);
+
+#endif
+```
+
+**カスタマイズポイント**:
+- 関数名を変更
+- パラメータ型を変更
+- 戻り値型を変更
+
+### target/jchg/_template/module_template.c
+
+**役割**: ターゲットモジュールの実装テンプレート
+
+```c
+#include "module_template.h"
+
+s4 module_template_function1(s4 value) {
+    // TODO: 実装を追加
+    return value;
+}
+
+u4 module_template_function2(u1* data, u4 length) {
+    if (data == NULL || length == 0) {
+        return 0;
+    }
+    return length;
+}
+```
+
+**カスタマイズポイント**:
+- TODO: 実装を追加 の部分に実装を追加
+
+### tests/_template/test_module_template.cpp
+
+**役割**: GTest テストファイルのテンプレート
+
+```cpp
+#include <gtest/gtest.h>
+
+extern "C" {
+    #include "module_template.h"
+}
+
+class ModuleTemplateTest : public ::testing::Test {
+    // テスト用ヘルパーメソッド
+};
+
+TEST_F(ModuleTemplateTest, Function1_BasicTest) {
+    // テストケース
+}
+```
+
+**カスタマイズポイント**:
+- SetUp()/TearDown() に初期化/クリーンアップ処理を追加
+- テストケースを追加/削除
+
+### tests/_template/CMakeLists.txt.template
+
+**役割**: CMake テストビルド設定のテンプレート
+
+```cmake
+cmake_minimum_required(VERSION 3.10)
+
+set(MODULE_NAME template)
+
+add_executable(test_module_${MODULE_NAME} test_module_${MODULE_NAME}.cpp)
+
+target_include_directories(test_module_${MODULE_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/target/jchg/${MODULE_NAME}
+    ${CMAKE_SOURCE_DIR}/target/inc
+    ${CMAKE_SOURCE_DIR}/fff
+)
+
+target_link_libraries(test_module_${MODULE_NAME}
+    gtest
+    gtest_main
+    pthread
+)
+
+target_compile_options(test_module_${MODULE_NAME} PRIVATE
+    -O0 -g --coverage -fprofile-arcs -ftest-coverage
+)
+target_link_options(test_module_${MODULE_NAME} PRIVATE
+    --coverage -fprofile-arcs -ftest-coverage
+)
+
+add_test(NAME Module${MODULE_NAME}Test COMMAND test_module_${MODULE_NAME})
+```
+
+**カスタマイズポイント**:
+- 追加の include ディレクトリが必要な場合は `target_include_directories` に追加
+- 追加のライブラリが必要な場合は `target_link_libraries` に追加
+
+### double/_template/module_stub_template.c
+
+**役割**: FFF スタブのテンプレート
+
+```c
+/**
+ * @file module_stub.c
+ * @brief FFF Stubs for module_template external functions
+ */
+
+#include "module_template.h"
+
+#define DEFINE_FFF_GLOBALS
+#include "fff.h"
+
+// スタブ宣言例:
+// FAKE_VALUE_FUNC2(u4, external_function, u1*, u4);
+```
+
+**カスタマイズポイント**:
+- モジュール内で使用する外部関数をスタブ化
+
+---
+
+## 🔧 トラブルシューティング
+
+### Q. スクリプトでエラーが出た
+
+A. 以下を確認してください:
+
+1. スクリプトが実行可能か確認:
+   ```bash
+   ls -la tools/add_module.sh
+   # 実行可能でない場合:
+   chmod +x tools/add_module.sh
+   ```
+
+2. モジュール名が有効か確認:
+   ```bash
+   # 有効: moduleD, MODULE_E, my_module_1
+   # 無効: 4module (数字で始まる), my-module (ハイフン)
+   ```
+
+3. モジュールが既に存在していないか確認:
+   ```bash
+   ls -la target/jchg/ | grep moduleD
+   ```
+
+### Q. 手動でファイルを作成したい
+
+A. 上記の「手動追加手順」を参照してください。
+
+### Q. モジュールを削除したい
+
+A. 以下で削除できます:
+
+```bash
+rm -rf target/jchg/moduleD
+rm -rf tests/moduleD
+rm -rf double/moduleD
+
+# tests/CMakeLists.txt から該当行を削除
+sed -i '/add_subdirectory(moduleD)/d' tests/CMakeLists.txt
+```
+
+### Q. テンプレートをカスタマイズしたい
+
+A. `_template` フォルダ内のファイルを編集してください:
+
+```bash
+# 例：target/jchg/_template/module_template.c のテンプレートを編集
+vim target/jchg/_template/module_template.c
+```
+
+新しく追加するモジュールはこのテンプレートから生成されるので、今後のモジュール追加に反映されます。
+
+---
+
+## 📝 よくあるパターン
+
+### パターン 1: 外部モジュール関数を使用するモジュール
+
+外部モジュール関数（例：u4g_mem_write）をスタブ化する場合:
+
+**tests/moduleD/test_moduleD.cpp**:
+
+```cpp
+extern "C" {
+    #include "moduleD.h"
+    #define DEFINE_FFF_GLOBALS
+    #include "fff.h"
+    FAKE_VALUE_FUNC2(u4, u4g_mem_write, u1*, u4);
+}
+
+TEST_F(ModuleDTest, WriteDataTest) {
+    RESET_FAKE(u4g_mem_write);
+    u4g_mem_write_fake.return_val = 4;
+    
+    // テスト実行
+    // ...
+    
+    EXPECT_EQ(1, u4g_mem_write_fake.call_count);
+}
+```
+
+### パターン 2: 複数の関数を実装するモジュール
+
+複数の関数がある場合、ヘッダーとソースに追加:
+
+**target/jchg/moduleD/moduleD.h**:
+
+```c
+s4 moduleD_function1(s4 value);
+s4 moduleD_function2(s4 a, s4 b);
+u4 moduleD_function3(u1* data, u4 length);
+```
+
+**target/jchg/moduleD/moduleD.c**:
+
+```c
+s4 moduleD_function1(s4 value) { ... }
+s4 moduleD_function2(s4 a, s4 b) { ... }
+u4 moduleD_function3(u1* data, u4 length) { ... }
+```
+
+**tests/moduleD/test_moduleD.cpp**:
+
+```cpp
+TEST_F(ModuleDTest, Function1_Test) { ... }
+TEST_F(ModuleDTest, Function2_Test) { ... }
+TEST_F(ModuleDTest, Function3_Test) { ... }
+```
+
+---
+
+## 📖 参照
+
+- [プロジェクト概要](00_プロジェクト概要.md)
+- [ビルドと実行ガイド](04_ビルドと実行ガイド.md)
+- [モジュール別テスト説明](02_モジュール別テスト説明.md)
+- [FFF スタブ化ガイド](03_FFFスタブ化ガイド.md)
