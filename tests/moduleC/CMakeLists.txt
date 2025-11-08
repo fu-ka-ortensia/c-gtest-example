@@ -1,25 +1,35 @@
 cmake_minimum_required(VERSION 3.10)
 
-# moduleC test
-add_executable(test_moduleC 
-    test_moduleC.cpp
+# Set module name
+set(MODULE_NAME moduleC)
+
+# Create test executable
+add_executable(test_${MODULE_NAME} 
+    test_${MODULE_NAME}.cpp
+    ../../target/jchg/${MODULE_NAME}/${MODULE_NAME}.c
 )
 
-target_include_directories(test_moduleC PRIVATE 
-    ${CMAKE_SOURCE_DIR}/target/jchg/moduleC
+# Include directories
+target_include_directories(test_${MODULE_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/target/jchg/${MODULE_NAME}
     ${CMAKE_SOURCE_DIR}/target/inc
     ${CMAKE_SOURCE_DIR}/fff
 )
 
-# カバレッジオプション
-target_compile_options(test_moduleC PRIVATE --coverage -fprofile-arcs -ftest-coverage)
-target_link_options(test_moduleC PRIVATE --coverage -lgcov)
-
-target_link_libraries(test_moduleC 
-    gtest 
+# Link libraries
+target_link_libraries(test_${MODULE_NAME}
+    gtest
     gtest_main
     pthread
 )
 
-# テストを登録
-add_test(NAME ModuleCTests COMMAND test_moduleC)
+# Compile options for coverage
+target_compile_options(test_${MODULE_NAME} PRIVATE
+    -O0 -g --coverage -fprofile-arcs -ftest-coverage
+)
+target_link_options(test_${MODULE_NAME} PRIVATE
+    --coverage -fprofile-arcs -ftest-coverage
+)
+
+# Register test
+add_test(NAME ModuleCTests COMMAND test_${MODULE_NAME})

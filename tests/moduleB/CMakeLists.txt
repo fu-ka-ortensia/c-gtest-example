@@ -1,28 +1,35 @@
 cmake_minimum_required(VERSION 3.10)
 
-# moduleB test
-add_executable(test_moduleB 
-    test_moduleB.cpp
-    ${CMAKE_SOURCE_DIR}/target/jchg/moduleB/moduleB.c
+# Set module name
+set(MODULE_NAME moduleB)
+
+# Create test executable
+add_executable(test_${MODULE_NAME} 
+    test_${MODULE_NAME}.cpp
+    ../../target/jchg/${MODULE_NAME}/${MODULE_NAME}.c
 )
 
-target_include_directories(test_moduleB PRIVATE 
-    ${CMAKE_SOURCE_DIR}/target/jchg/moduleB
+# Include directories
+target_include_directories(test_${MODULE_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/target/jchg/${MODULE_NAME}
     ${CMAKE_SOURCE_DIR}/target/inc
+    ${CMAKE_SOURCE_DIR}/fff
 )
 
-# C言語ファイルのコンパイル設定
-set_source_files_properties(${CMAKE_SOURCE_DIR}/target/jchg/moduleB/moduleB.c PROPERTIES LANGUAGE C)
-
-# カバレッジオプション
-target_compile_options(test_moduleB PRIVATE --coverage -fprofile-arcs -ftest-coverage)
-target_link_options(test_moduleB PRIVATE --coverage -lgcov)
-
-target_link_libraries(test_moduleB 
-    gtest 
+# Link libraries
+target_link_libraries(test_${MODULE_NAME}
+    gtest
     gtest_main
     pthread
 )
 
-# テストを登録
-add_test(NAME ModuleBTests COMMAND test_moduleB)
+# Compile options for coverage
+target_compile_options(test_${MODULE_NAME} PRIVATE
+    -O0 -g --coverage -fprofile-arcs -ftest-coverage
+)
+target_link_options(test_${MODULE_NAME} PRIVATE
+    --coverage -fprofile-arcs -ftest-coverage
+)
+
+# Register test
+add_test(NAME ModuleBTests COMMAND test_${MODULE_NAME})
