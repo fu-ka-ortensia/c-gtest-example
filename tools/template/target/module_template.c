@@ -12,7 +12,7 @@
  * @return Result
  */
 s4 template_function1(s4 value) {
-    if (value < 0) {
+    if ( value < 0 ) {
         return 0;
     }
     return value;
@@ -25,7 +25,7 @@ s4 template_function1(s4 value) {
  * @return Number of processed bytes
  */
 u4 template_function2(u1* data, u4 length) {
-    if (data == NULL || length == 0) {
+    if ( data == NULL || length == 0 ) {
         return 0;
     }
     // TODO: Implement your logic here

@@ -6,6 +6,6 @@ s4 moduleB_subtract(s4 a, s4 b) {
 }
 
 s4 moduleB_divide(s4 a, s4 b) {
-    if (b == 0) return 0;
+    if ( b == 0 ) return 0;
     return a / b;
 }
