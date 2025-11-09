@@ -10,8 +10,8 @@
 #include "fff.h"
 
 /* Declare stubs for external functions if needed */
-// Example:
-// FAKE_VALUE_FUNC2(u4, external_function, u1*, u4);
+/* Example: */
+/* FAKE_VALUE_FUNC2(u4, external_function, u1*, u4); */
 
 /* If this module depends on external functions, declare them here.
  * Uncomment and modify as needed:
