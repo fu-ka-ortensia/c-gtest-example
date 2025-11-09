@@ -4,22 +4,22 @@
 #include "common.h"
 
 /* ============================================================================
- * Function Declarations
+ * 関数宣言
  * ============================================================================
  */
 
 /**
- * @brief Template function 1
- * @param value Input value
- * @return Result
+ * @brief テンプレート関数1
+ * @param value 入力値
+ * @return 結果
  */
 s4 template_function1(s4 value);
 
 /**
- * @brief Template function 2
- * @param data Input data pointer
- * @param length Data length
- * @return Number of processed bytes
+ * @brief テンプレート関数2
+ * @param data 入力データポインタ
+ * @param length データ長
+ * @return 処理されたバイト数
  */
 u4 template_function2(u1* data, u4 length);
 

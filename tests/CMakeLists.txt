@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-# tests root CMakeLists.txt
+# テスト用CMakeLists.txt
 enable_testing()
 
 # グローバルカバレッジ設定
