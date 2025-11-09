@@ -14,6 +14,10 @@ TEST(ModuleATest, AddNegativeNumbers) {
     EXPECT_EQ(1, moduleA_add(-2, 3));
 }
 
+/* moduleA_add のテスト */
+TEST(ModuleATest, AddPositiveNumbers) {
+}
+
 /* Test for moduleA_multiply */
 TEST(ModuleATest, MultiplyPositiveNumbers) {
     EXPECT_EQ(6, moduleA_multiply(2, 3));
@@ -24,3 +28,6 @@ TEST(ModuleATest, MultiplyNegativeNumbers) {
     EXPECT_EQ(6, moduleA_multiply(-2, -3));
     EXPECT_EQ(-6, moduleA_multiply(-2, 3));
 }
+
+/* moduleA_multiply のテスト */
+TEST(ModuleATest, MultiplyPositiveNumbers) {

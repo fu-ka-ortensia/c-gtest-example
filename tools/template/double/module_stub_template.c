@@ -5,20 +5,20 @@
 
 #include "module_template.h"
 
-/* Include FFF framework */
+/* FFFフレームワークをインクルード */
 #define DEFINE_FFF_GLOBALS
 #include "fff.h"
 
-/* Declare stubs for external functions if needed */
-/* Example: */
+/* 外部関数のスタブを宣言（必要に応じて） */
+/* 例： */
 /* FAKE_VALUE_FUNC2(u4, external_function, u1*, u4); */
 
-/* If this module depends on external functions, declare them here.
- * Uncomment and modify as needed:
+/* このモジュールが外部関数に依存する場合、ここで宣言します。
+ * 必要に応じてコメントを外して修正してください：
  *
  * FAKE_VALUE_FUNC2(u4, external_mem_write, u1*, u4);
  * 
- * Then in your test file:
+ * その後、テストファイルで：
  * extern "C" {
  *     #include "module_template.h"
  *     #define DEFINE_FFF_GLOBALS

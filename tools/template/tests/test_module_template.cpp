@@ -7,41 +7,41 @@ extern "C" {
 class ModuleTemplateTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        /* Initialize any resources needed for tests */
+        /* テスト用のリソースを初期化 */
     }
 
     void TearDown() override {
-        /* Clean up resources after tests */
+        /* テスト後にリソースをクリーンアップ */
     }
 };
 
-/* Test: Function 1 - Basic test */
+/* テスト：関数1 - 基本テスト */
 TEST_F(ModuleTemplateTest, Function1_BasicTest) {
     s4 result = template_function1(100);
     EXPECT_EQ(100, result);
 }
 
-/* Test: Function 1 - Negative value */
+/* テスト：関数1 - 負の値 */
 TEST_F(ModuleTemplateTest, Function1_NegativeValue) {
     s4 result = template_function1(-50);
     EXPECT_EQ(0, result);
 }
 
-/* Test: Function 2 - Basic test */
+/* テスト：関数2 - 基本テスト */
 TEST_F(ModuleTemplateTest, Function2_BasicTest) {
     u1 test_data[4] = {1, 2, 3, 4};
     u4 result = template_function2(test_data, 4);
     EXPECT_EQ(4, result);
 }
 
-/* Test: Function 2 - Empty data */
+/* テスト：関数2 - 空のデータ */
 TEST_F(ModuleTemplateTest, Function2_EmptyData) {
     u1 test_data[1];
     u4 result = template_function2(test_data, 0);
     EXPECT_EQ(0, result);
 }
 
-/* Test: Function 2 - NULL pointer */
+/* テスト：関数2 - NULLポインタ */
 TEST_F(ModuleTemplateTest, Function2_NullPointer) {
     u4 result = template_function2(NULL, 4);
     EXPECT_EQ(0, result);
