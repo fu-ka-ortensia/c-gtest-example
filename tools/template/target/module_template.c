@@ -28,6 +28,6 @@ u4 template_function2(u1* data, u4 length) {
     if ( data == NULL || length == 0 ) {
         return 0;
     }
-    // TODO: Implement your logic here
+    /* TODO: Implement your logic here */
     return length;
 }
